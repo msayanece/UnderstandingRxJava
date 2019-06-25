@@ -9,16 +9,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    fun createListOfStudents(): MutableLiveData<List<String>> {
-        val studentNameLiveData: MutableLiveData<List<String>> = MutableLiveData()
+
+    fun createListOfStudents(): MutableLiveData<String> {
+        val studentNameLiveData: MutableLiveData<String> = MutableLiveData()
         compositeDisposable.add(MainActivityRepositories()
             .getSomeStudents()
-            .buffer(3)
+//            .buffer(3)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 Log.d("understandingrxjava vM", "data: $it")
-                studentNameLiveData.postValue(it)
+                studentNameLiveData.value = it
             })
         return studentNameLiveData
     }
